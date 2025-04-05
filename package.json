@@ -7,7 +7,9 @@
   },
   "dependencies": {
     "@elysiajs/swagger": "^1.2.0",
-    "elysia": "latest"
+    "arktype": "^2.1.17",
+    "elysia": "latest",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "bun-types": "latest"
