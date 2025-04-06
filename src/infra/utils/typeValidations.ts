@@ -8,4 +8,10 @@ export const CreateUserRequest = type({
     password: "string",
     phone: "string"
 })
-export type User = typeof CreateUserRequest.infer
+
+export const CreateStoreRequest = type({
+    name: "string",
+    address: "string",
+    cep: "string.numeric == 8",
+    //store_id: "number.integer"
+})

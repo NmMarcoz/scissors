@@ -1,4 +1,5 @@
 import { SQLiteError } from "bun:sqlite";
+import { ValidationException } from "../customErrors/ValidationException";
 
 export const errorHandler = (error, code, set) =>{
     console.error("ERROR ON ELYSIA CATCH", error);
@@ -25,12 +26,23 @@ export const errorHandler = (error, code, set) =>{
 
         if (error instanceof ReferenceError) {
             console.error("REFERENCE ERROR")
+            set.status = 500;
             return {
                 message: "Erro interno de servidor, entre em contato",
                 reason: { summary: error.cause },
             };
         }
+        if (error instanceof ValidationException){
+            console.error("VALIDATION ERROR");
+            set.status = 400
+            return{
+                message: error.message,
+                reason: error.reason
+            }
+        }
+        set.status = 500;
         return {
+            
             message: "Erro desconhecido",
             reason: { summary: error?.message ?? "Internal error" },
         };

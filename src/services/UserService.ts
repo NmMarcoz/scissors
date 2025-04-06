@@ -1,9 +1,7 @@
-import { User } from "../infra/utils/typeValidations";
+import { User } from "../infra/types/EntityTypes";
 import { db } from "../infra/database/db";
-import { v7 as uuid } from "uuid";
-import { ElysiaErrors } from "elysia/dist/error";
 
-export const createUser = async (data: User) => {
+export const createUser = async (data: Omit<User, "id">) => {
     const query =  db.query(`INSERT INTO Users 
       (name, password, email, birthdate, phone_number) 
       VALUES 
@@ -28,3 +26,5 @@ export const getAllUsers = async ()=>{
     //db.close();
     return ommited;
 }
+
+

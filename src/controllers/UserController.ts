@@ -2,6 +2,7 @@ import { Elysia } from "elysia";
 import { CreateUserRequest } from "../infra/utils/typeValidations";
 import { type } from "arktype";
 import * as userService from "../services/UserService";
+import { validator } from "../infra/utils/validator";
 
 export const UserController = new Elysia()
     .get("/", async ({set}) => {
@@ -22,19 +23,8 @@ export const UserController = new Elysia()
     })
     .post("/", async ({ body, set, headers }) => {
         type User = typeof CreateUserRequest.infer;
-        const out = CreateUserRequest(body);
-        if (out instanceof type.errors) {
-            set.status = 400;
-            return {
-                message: "Erro de validação",
-                reason: {
-                    summary: out.summary,
-                    expected: CreateUserRequest.description,
-                },
-            };
-        }
-        const user: User = out;
-        const databaseResponse = await userService.createUser(user)
+        const user = validator(CreateUserRequest, body) as User;
+        await userService.createUser(user)
         set.status = 201
         const {password, ...ommited} = user;
         return{
